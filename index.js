@@ -1,6 +1,6 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
+const cors = require("cors");
 
 const requestLogger = (req, res, next) => {
   console.log("Method:", req.method);
@@ -17,6 +17,7 @@ const unknownEndpoint = (req, res) => {
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
+app.use(express.static("dist"));
 
 let notes = [
   {
@@ -79,10 +80,11 @@ app.post("/api/notes", (request, response) => {
   const note = {
     content: body.content,
     important: body.important || false,
+    date: new Date(),
     id: generateId(),
   };
 
-  const notes = notes.concat(note);
+  notes = notes.concat(note);
   response.json(note);
 });
 
